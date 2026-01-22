@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar - The Spot Kava Bar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Navigation - Fixed, semi-transparent overlay */
+        nav {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: red;
+            -webkit-text-stroke: 1px white;
+            font-family: 'Yellowtail', cursive;
+            font-size: 2rem; /* Slightly larger since script fonts can feel smaller */
+            font-weight: normal; /* Yellowtail only has one weight */
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background: rgba(255,255,255,0.1);
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .nav-menu a[aria-current="page"] {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .menu-toggle:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* Page Header - Background image with overlay, same size as original */
+        .page-header {
+            background-image: url('images/eventsbanner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            padding: 4rem 20px 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Dark overlay for better text legibility */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Ensure text appears above overlay */
+        .page-header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 20px;
+        }
+
+        /* Calendar Header */
+        .calendar-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+
+        .calendar-header h2 {
+            color: #2c5f4f;
+            font-size: 2rem;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .nav-btn {
+            background: #2c5f4f;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1.25rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover,
+        .nav-btn:focus {
+            background: #1e4a3d;
+            outline: 2px solid #2c5f4f;
+            outline-offset: 2px;
+        }
+
+        .calendar-day.today {
+            background: #e8f4f1;
+        }
+
+        .calendar-day.today .day-number {
+            background: #2c5f4f;
+            color: #fff;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Calendar Grid */
+        .calendar {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #2c5f4f;
+            color: #fff;
+        }
+
+        .weekday {
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e0e0e0;
+        }
+
+        .calendar-day {
+            background: #fff;
+            min-height: 120px;
+            padding: 0.5rem;
+            position: relative;
+        }
+
+        .calendar-day.other-month {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: #2c5f4f;
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-day.other-month .day-number {
+            color: #999;
+        }
+
+        .event {
+            background: #e8f4f1;
+            border-left: 3px solid #2c5f4f;
+            padding: 0.25rem 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .event:hover,
+        .event:focus {
+            background: #d1e8e1;
+            outline: 2px solid #2c5f4f;
+            outline-offset: 1px;
+        }
+
+        .event-time {
+            font-weight: bold;
+            color: #2c5f4f;
+        }
+
+        /* Event Legend */
+        .event-legend {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+
+        .event-legend h3 {
+            color: #2c5f4f;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend-color.live-music {
+            background: #e8f4f1;
+            border: 2px solid #2c5f4f;
+        }
+
+        /* Footer - Matching landing page */
+        footer {
+            background: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 20px;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.6);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                padding: 1rem 20px;
+                border-radius: 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .calendar-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .weekday {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .calendar-day {
+                min-height: 80px;
+                padding: 0.25rem;
+            }
+
+            .day-number {
+                font-size: 0.9rem;
+            }
+
+            .event {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.3rem;
+            }
+
+            .legend-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="the-spot-landing.html" class="logo">The Spot</a>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu">
+                Menu
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="calendar.html" aria-current="page">Calendar</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Events Calendar</h1>
+        <p>Join us for live music, special events, and community gatherings</p>
+    </header>
+
+    <main id="main-content">
+        <div class="calendar-header">
+            <button class="nav-btn" id="prev-month" aria-label="Previous month">&lt;</button>
+            <h2 id="month-year">January 2026</h2>
+            <button class="nav-btn" id="next-month" aria-label="Next month">&gt;</button>
+        </div>
+
+        <div class="calendar" role="table" id="calendar">
+            <div class="calendar-weekdays" role="row">
+                <div class="weekday" role="columnheader">Sun</div>
+                <div class="weekday" role="columnheader">Mon</div>
+                <div class="weekday" role="columnheader">Tue</div>
+                <div class="weekday" role="columnheader">Wed</div>
+                <div class="weekday" role="columnheader">Thu</div>
+                <div class="weekday" role="columnheader">Fri</div>
+                <div class="weekday" role="columnheader">Sat</div>
+            </div>
+
+            <div class="calendar-days" id="calendar-days">
+                <!-- Days will be generated by JavaScript -->
+            </div>
+        </div>
+
+<!--        <section class="event-legend">
+            <h3>How to Update This Calendar</h3>
+            <p style="margin-bottom: 1rem; color: #555;">Edit the <code>eventConfig</code> object in the JavaScript. Three event types are supported:</p>
+            
+            <div style="background: #fff; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <strong>Weekly Recurring</strong> (e.g., every Tuesday)
+                <pre style="overflow-x: auto; font-size: 0.9rem; margin-top: 0.5rem;">{ day: 2, time: '8pm', title: 'Karaoke Night', description: 'Your event details here.' }
+// day: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat</pre>
+            </div>
+            
+            <div style="background: #fff; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <strong>Monthly Recurring</strong> (e.g., first Sunday of the month)
+                <pre style="overflow-x: auto; font-size: 0.9rem; margin-top: 0.5rem;">{ week: 1, day: 0, time: '11am', title: 'Jazz Brunch', description: 'Your event details here.' }
+// week: 1-4 for 1st-4th, or 'last' for last occurrence</pre>
+            </div>
+            
+            <div style="background: #fff; padding: 1rem; border-radius: 4px;">
+                <strong>One-Time Events</strong> (specific date only)
+                <pre style="overflow-x: auto; font-size: 0.9rem; margin-top: 0.5rem;">{ date: '2026-01-18', time: '6pm', title: 'Vine Street Fundraiser', description: 'Your event details here.' }</pre>
+            </div>
+        </section> -->
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>The Spot • Kava Bar and Music</strong></p>
+            <p>217 Main Street   •   (603) 718-4732   •   Open Daily 2pm - 11pm</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+
+        // Dynamic Calendar
+        const calendarDays = document.getElementById('calendar-days');
+        const monthYearDisplay = document.getElementById('month-year');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const calendar = document.getElementById('calendar');
+
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        // Current display month/year (starts with today)
+        const today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+
+        // Events Configuration
+        // Three types of events:
+        // 1. Weekly: { type: 'weekly', day: 0-6 (Sun-Sat), time: '', title: '', description: '' }
+        // 2. Monthly: { type: 'monthly', week: 1-4 or 'last', day: 0-6, time: '', title: '', description: '' }
+        // 3. One-time: { type: 'once', date: 'YYYY-MM-DD', time: '', title: '', description: '' }
+        
+        const eventConfig = {
+            weekly: [
+                { day: 2, time: '8pm', title: 'Karaoke Night', description: 'Sing your heart out every Tuesday! Sign-ups start at 7:30pm.' },
+            ],
+            monthly: [
+                { week: 1, day: 0, time: '11am', title: 'Jazz Brunch', description: 'Live jazz music with brunch specials. Reservations recommended.' },
+            ],
+            once: [
+                { date: '2026-01-18', time: '6pm', title: 'Vine Street Fundraiser', description: 'A special fundraising event supporting Vine Street Community Services.' },
+            ]
+        };
+
+        // Helper: Get the Nth weekday of a month (e.g., 1st Sunday, 2nd Wednesday)
+        function getNthWeekdayOfMonth(year, month, weekday, n) {
+            const firstDay = new Date(year, month, 1);
+            let dayOfWeek = firstDay.getDay();
+            
+            // Calculate the first occurrence of the weekday
+            let firstOccurrence = 1 + ((weekday - dayOfWeek + 7) % 7);
+            
+            // Calculate the Nth occurrence
+            let nthDay = firstOccurrence + (n - 1) * 7;
+            
+            // Check if it's still in the same month
+            const daysInMonth = getDaysInMonth(month, year);
+            if (nthDay > daysInMonth) return null;
+            
+            return nthDay;
+        }
+
+        // Helper: Get the last weekday of a month
+        function getLastWeekdayOfMonth(year, month, weekday) {
+            const daysInMonth = getDaysInMonth(month, year);
+            const lastDay = new Date(year, month, daysInMonth);
+            let dayOfWeek = lastDay.getDay();
+            
+            let diff = dayOfWeek - weekday;
+            if (diff < 0) diff += 7;
+            
+            return daysInMonth - diff;
+        }
+
+        // Get all events for a specific date
+        function getEventsForDate(year, month, day) {
+            const eventsForDay = [];
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+            const dateKey = formatDateKey(year, month, day);
+            
+            // Check weekly recurring events
+            eventConfig.weekly.forEach(event => {
+                if (event.day === dayOfWeek) {
+                    eventsForDay.push({ time: event.time, title: event.title, description: event.description || '' });
+                }
+            });
+            
+            // Check monthly recurring events
+            eventConfig.monthly.forEach(event => {
+                if (event.day === dayOfWeek) {
+                    let targetDay;
+                    if (event.week === 'last') {
+                        targetDay = getLastWeekdayOfMonth(year, month, event.day);
+                    } else {
+                        targetDay = getNthWeekdayOfMonth(year, month, event.day, event.week);
+                    }
+                    if (targetDay === day) {
+                        eventsForDay.push({ time: event.time, title: event.title, description: event.description || '' });
+                    }
+                }
+            });
+            
+            // Check one-time events
+            eventConfig.once.forEach(event => {
+                if (event.date === dateKey) {
+                    eventsForDay.push({ time: event.time, title: event.title, description: event.description || '' });
+                }
+            });
+            
+            // Sort by time
+            eventsForDay.sort((a, b) => {
+                const timeA = convertTo24Hour(a.time);
+                const timeB = convertTo24Hour(b.time);
+                return timeA.localeCompare(timeB);
+            });
+            
+            return eventsForDay;
+        }
+
+        // Helper: Convert time string to 24-hour for sorting
+        function convertTo24Hour(timeStr) {
+            const match = timeStr.match(/(\d+)(?::(\d+))?\s*(am|pm)?/i);
+            if (!match) return '00:00';
+            
+            let hours = parseInt(match[1]);
+            const minutes = match[2] ? match[2] : '00';
+            const period = match[3] ? match[3].toLowerCase() : 'am';
+            
+            if (period === 'pm' && hours !== 12) hours += 12;
+            if (period === 'am' && hours === 12) hours = 0;
+            
+            return `${String(hours).padStart(2, '0')}:${minutes}`;
+        }
+
+        function getDaysInMonth(month, year) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        function getFirstDayOfMonth(month, year) {
+            return new Date(year, month, 1).getDay();
+        }
+
+        function formatDateKey(year, month, day) {
+            const m = String(month + 1).padStart(2, '0');
+            const d = String(day).padStart(2, '0');
+            return `${year}-${m}-${d}`;
+        }
+
+        function renderCalendar() {
+            calendarDays.innerHTML = '';
+            
+            const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+            const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+            const daysInPrevMonth = getDaysInMonth(currentMonth - 1, currentYear);
+            
+            // Update header
+            monthYearDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            calendar.setAttribute('aria-label', `${monthNames[currentMonth]} ${currentYear} event calendar`);
+            
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                const dayEl = createDayElement(day, true);
+                calendarDays.appendChild(dayEl);
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = day === today.getDate() && 
+                                currentMonth === today.getMonth() && 
+                                currentYear === today.getFullYear();
+                const dayEl = createDayElement(day, false, isToday);
+                
+                // Check for events using the new system
+                const dayEvents = getEventsForDate(currentYear, currentMonth, day);
+                dayEvents.forEach(event => {
+                    const eventEl = document.createElement('div');
+                    eventEl.className = 'event';
+                    eventEl.tabIndex = 0;
+                    eventEl.setAttribute('role', 'button');
+                    eventEl.innerHTML = `<span class="event-time">${event.time}:</span> ${event.title}`;
+                    
+                    // Event click/keyboard handler
+                    eventEl.addEventListener('click', () => {
+                        alert(`${event.title}\n${event.time}\n\n${event.description}`);
+                    });
+                    eventEl.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            alert(`${event.title}\n${event.time}\n\n${event.description}`);
+                        }
+                    });
+                    
+                    dayEl.appendChild(eventEl);
+                });
+                
+                calendarDays.appendChild(dayEl);
+            }
+            
+            // Next month days (fill remaining cells to complete the grid)
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayEl = createDayElement(day, true);
+                calendarDays.appendChild(dayEl);
+            }
+        }
+
+        function createDayElement(day, isOtherMonth, isToday = false) {
+            const dayEl = document.createElement('div');
+            dayEl.className = 'calendar-day';
+            if (isOtherMonth) dayEl.classList.add('other-month');
+            if (isToday) dayEl.classList.add('today');
+            dayEl.setAttribute('role', 'gridcell');
+            
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'day-number';
+            dayNumber.textContent = day;
+            dayEl.appendChild(dayNumber);
+            
+            return dayEl;
+        }
+
+        // Navigation
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        // Initial render
+        renderCalendar();
+    </script>
+</body>
+</html>

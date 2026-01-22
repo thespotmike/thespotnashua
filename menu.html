@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - The Spot Kava Bar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Navigation - Fixed, semi-transparent overlay */
+        nav {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: red;
+            -webkit-text-stroke: 1px white;
+            font-family: 'Yellowtail', cursive;
+            font-size: 2rem; /* Slightly larger since script fonts can feel smaller */
+            font-weight: normal; /* Yellowtail only has one weight */
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background: rgba(255,255,255,0.1);
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .nav-menu a[aria-current="page"] {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .menu-toggle:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* Page Header - Background image with overlay */
+        .page-header {
+            background-image: url('images/drinkbanner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            padding: 4rem 20px 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Dark overlay for better text legibility */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Ensure text appears above overlay */
+        .page-header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 20px;
+        }
+
+        /* Category Cards */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .category-card:focus {
+            outline: none;
+            border-color: #2c5f4f;
+        }
+
+        .category-card.active {
+            border-color: #2c5f4f;
+        }
+
+        .category-card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .category-card-title {
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2c5f4f;
+        }
+
+        /* Menu Details Section */
+        .menu-details {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+            display: none;
+        }
+
+        .menu-details.active {
+            display: block;
+        }
+
+        .menu-details h2 {
+            color: #2c5f4f;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f4f1;
+        }
+
+        .menu-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-item-name {
+            font-weight: bold;
+            color: #2c5f4f;
+        }
+
+        .menu-item-description {
+            color: #555;
+            margin-left: 0.5rem;
+        }
+
+        .menu-section-subtitle {
+            font-size: 1.25rem;
+            color: #2c5f4f;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .menu-note {
+            background: #f8f8f8;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .menu-note ul {
+            margin: 0.5rem 0 0 1.5rem;
+        }
+
+        .menu-note li {
+            margin-bottom: 0.25rem;
+        }
+
+        .menu-link {
+            color: #2c5f4f;
+            text-decoration: underline;
+        }
+
+        .menu-link:hover,
+        .menu-link:focus {
+            color: #1e4a3d;
+        }
+
+        .menu-warning {
+            background: #fff8e6;
+            border-left: 3px solid #e6a700;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Footer - Matching landing page */
+        footer {
+            background: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 20px;
+            margin-top: 1rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.6);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                padding: 1rem 20px;
+                border-radius: 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-card-image {
+                height: 120px;
+            }
+
+            .category-card-title {
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="the-spot-landing.html" class="logo">The Spot</a>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu">
+                Menu
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="menu.html" aria-current="page">Menu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Menu</h1>
+        <p>Kava, coffee, mocktails, and more; crafted with <strong>care</strong></p>
+    </header>
+
+    <main id="main-content">
+        <div class="category-grid">
+            <div class="category-card" tabindex="0" role="button" aria-pressed="false" data-category="coffee">
+                <img src="images/narwhalspot.jpg" alt="Coffee" class="category-card-image">
+                <div class="category-card-title">Coffee</div>
+            </div>
+            <div class="category-card" tabindex="0" role="button" aria-pressed="false" data-category="kava">
+                <img src="images/kavaspot.jpg" alt="Kava" class="category-card-image">
+                <div class="category-card-title">Kava</div>
+            </div>
+            <div class="category-card" tabindex="0" role="button" aria-pressed="false" data-category="mocktails">
+                <img src="images/mocktailspot.jpg" alt="Mocktails" class="category-card-image">
+                <div class="category-card-title">Mocktails</div>
+            </div>
+            <div class="category-card" tabindex="0" role="button" aria-pressed="false" data-category="food">
+                <img src="images/cheesespot.jpg" alt="Food" class="category-card-image">
+                <div class="category-card-title">Food</div>
+            </div>
+        </div>
+
+        <section class="menu-details" id="menu-details" aria-live="polite">
+            <!-- Content will be populated by JavaScript -->
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>The Spot • Kava Bar and Music</strong></p>
+            <p>217 Main Street   •   (603) 718-4732   •   Open Daily 2pm - 11pm</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+
+        // Menu category data
+        const menuData = {
+            coffee: {
+                title: 'Coffee',
+                content: `
+                    <div class="menu-item">
+                        <span class="menu-item-name">Megalodon</span>
+                        <span class="menu-item-description">— A bold dark South American Arabica roast</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">Narwhal</span>
+                        <span class="menu-item-description">— A Guatemalan Sumatra roast with flavor notes of milk chocolate, cherry, nougat</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">Espresso</span>
+                        <span class="menu-item-description">— Served by the shot</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">Decaf</span>
+                        <span class="menu-item-description">— We're not coffee snobs. If you want or need decaf coffee, we've got you covered.</span>
+                    </div>
+                `
+            },
+            kava: {
+                title: 'Kava',
+                content: `
+                    <div class="menu-item">
+                        <span class="menu-item-name">Kelai</span>
+                        <span class="menu-item-description">— Heady and uplifting</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">Borogu</span>
+                        <span class="menu-item-description">— Bold, relaxing, and tranquil</span>
+                    </div>
+                    <div class="menu-note">
+                        Served traditional style in a shell or in a refrigerated can
+                    </div>
+                    <h3 class="menu-section-subtitle">What is Kava?</h3>
+                    <p style="color: #555; margin-bottom: 1rem;">Kava is a traditional South Pacific root drink known for its calming, social, and mood-lifting effects. It's been shared ceremonially for centuries in places like Fiji, Vanuatu, and Hawaii.</p>
+                    <div class="menu-note">
+                        <strong>What to expect:</strong>
+                        <ul>
+                            <li>Relaxation without intoxication</li>
+                            <li>Connection and conversation</li>
+                            <li>Ease stress and anxiety</li>
+                            <li>Support restful sleep</li>
+                            <li>Enhance mood and focus without a hangover</li>
+                        </ul>
+                    </div>
+                    <div class="menu-warning">
+                        Be advised that consuming kava products may pose a risk to consumers and should not be consumed by persons under 18 years of age or by pregnant or breastfeeding women.
+                    </div>
+                `
+            },
+            mocktails: {
+                title: 'Mocktails',
+                content: `
+                    <p style="color: #555; margin-bottom: 1.5rem; font-style: italic;">Fresh-squeezed ingredients, crafted with love</p>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Spot</span>
+                        <span class="menu-item-description">— Spicy margarita (pineapple, mango)</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Gate City</span>
+                        <span class="menu-item-description">— Horchata (vegan: coconut, almond, rice, cinnamon)</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Greeley</span>
+                        <span class="menu-item-description">— Strawberry Lemonade</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Mine Falls Mule</span>
+                        <span class="menu-item-description">— Ginger beer (ginger, lime)</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Millyard</span>
+                        <span class="menu-item-description">— Lemonade</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Rail Trail</span>
+                        <span class="menu-item-description">— Blueberry Lemonade</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Riverview</span>
+                        <span class="menu-item-description">— Cranberry, rosemary, orange</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Whipple Way</span>
+                        <span class="menu-item-description">— Our Shirley Temple (grapefruit, grenadine, lime)</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Nashua Noir</span>
+                        <span class="menu-item-description">— Apple cider, blood orange</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Fields Grove</span>
+                        <span class="menu-item-description">— Banana, chocolate, oat milk, cinnamon</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Sky Meadow Sunset</span>
+                        <span class="menu-item-description">— Orange, lime, pineapple</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Holman Hurricane</span>
+                        <span class="menu-item-description">— Limonada (lime, sweetened condensed milk)</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">The Pheasant Lane</span>
+                        <span class="menu-item-description">— Iced latte</span>
+                    </div>
+                `
+            },
+            food: {
+                title: 'Food',
+                content: `
+                    <div class="menu-item">
+                        <span class="menu-item-name">Grilled Cheese</span>
+                        <span class="menu-item-description">— American, cheddar, provolone, or pepper jack cheese; add real bacon, sun-dried tomatoes, and garlic aioli for an extra $1 each</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-item-name">Cheesecake</span>
+                        <span class="menu-item-description">— From <a href="https://www.facebook.com/p/Slice-Of-Heaven-Cheesecakes-LLC-61572217045038/" target="_blank" rel="noopener noreferrer" class="menu-link">Slice of Heaven</a> in Derry, NH</span>
+                    </div>
+                    <h3 class="menu-section-subtitle">Joanne's Kitchen</h3>
+                    <p style="color: #555;">We're excited about our partnership with our neighbors at Joanne's Kitchen. After 6pm, you can place your order from their dinner menu at the bar, and they will bring it over to you.</p>
+                    <p style="margin-top: 1rem;"><a href="https://order.toasttab.com/online/joannes-kitchen-coffeeshop-219-main-st" target="_blank" rel="noopener noreferrer" class="menu-link">View Joanne's Kitchen Menu</a></p>
+                `
+            }
+        };
+
+        // Category card functionality
+        const categoryCards = document.querySelectorAll('.category-card');
+        const menuDetails = document.getElementById('menu-details');
+        let activeCategory = null;
+
+        function selectCategory(category) {
+            const card = document.querySelector(`[data-category="${category}"]`);
+            
+            // If clicking the same category, deselect it
+            if (activeCategory === category) {
+                card.classList.remove('active');
+                card.setAttribute('aria-pressed', 'false');
+                menuDetails.classList.remove('active');
+                menuDetails.innerHTML = '';
+                activeCategory = null;
+                return;
+            }
+
+            // Remove active state from all cards
+            categoryCards.forEach(c => {
+                c.classList.remove('active');
+                c.setAttribute('aria-pressed', 'false');
+            });
+
+            // Add active state to selected card
+            card.classList.add('active');
+            card.setAttribute('aria-pressed', 'true');
+
+            // Update menu details content
+            const data = menuData[category];
+            menuDetails.innerHTML = `
+                <h2>${data.title}</h2>
+                ${data.content}
+            `;
+            menuDetails.classList.add('active');
+
+            activeCategory = category;
+        }
+
+        categoryCards.forEach(card => {
+            card.addEventListener('click', () => {
+                selectCategory(card.dataset.category);
+            });
+
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectCategory(card.dataset.category);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

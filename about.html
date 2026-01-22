@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - The Spot Kava Bar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Navigation - Fixed, semi-transparent overlay */
+        nav {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: red;
+            -webkit-text-stroke: 1px white;
+            font-family: 'Yellowtail', cursive;
+            font-size: 2rem; /* Slightly larger since script fonts can feel smaller */
+            font-weight: normal; /* Yellowtail only has one weight */
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background: rgba(255,255,255,0.1);
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .nav-menu a[aria-current="page"] {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .menu-toggle:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* Page Header - Background image with overlay */
+        .page-header {
+            background-image: url('images/thespotnashua.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            padding: 4rem 20px 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Dark overlay for better text legibility */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Ensure text appears above overlay */
+        .page-header > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 20px;
+        }
+
+        /* Section Styles */
+        .content-section {
+            margin-bottom: 4rem;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            color: #2c5f4f;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-content {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Team Member Cards */
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .team-member {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .team-member-image {
+            width: 300px;
+            min-width: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .team-member-info {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .team-member-info h3 {
+            color: #2c5f4f;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-member-info .role {
+            color: #4a8f7a;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .team-member-info p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .team-member-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Footer - Matching landing page */
+        footer {
+            background: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 20px;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.6);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                padding: 1rem 20px;
+                border-radius: 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .team-member {
+                flex-direction: column;
+            }
+
+            .team-member-image {
+                width: 100%;
+                min-width: unset;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="the-spot-landing.html" class="logo">The Spot</a>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu">
+                Menu
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" aria-current="page">About</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>About Us</h1>
+        <p>Welcome to <strong>The Spot</strong>, where <strong>the vibe is real</strong> and the energy is <strong>devoted</strong>.</p>
+    </header>
+
+    <main id="main-content">
+        <section class="content-section">
+            <div class="section-header">
+                <h2>Our Mission</h2>
+            </div>
+            <div class="section-content">
+                <p>The Spot is a community hub nestled in the heart of downtown Nashua, New Hampshire. Since our inception, we've strived to create a space where people can gather, unwind, and connect.</p>
+                <p>By day, enjoy the cozy coffeehouse vibe with our selection of freshly brewed coffees from Anchorhead Coffee out of Seattle, WA. By night, The Spot transforms into an exciting showcase of local artistic talent, from live music to comedy to karaoke. There's something for everyone, day or night.</p>
+                <p>Our mission is to support and celebrate our local community, bringing people together through kava, conversation, and connection. We create a welcoming, sober atmosphere, where people can enjoy their first or second chances.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-header">
+                <h2>Our Team</h2>
+            </div>
+            <div class="team-grid">
+                <article class="team-member">
+                    <img src="images/mikespot.jpg" alt="Michael McDowell" class="team-member-image">
+                    <div class="team-member-info">
+                        <h3>Michael McDowell</h3>
+                        <p class="role">Owner & Founder</p>
+                        <p>Mike is a DJ, entrepreneur, and someone who believes in the power of music, community, and second chances. He has been <strong>sober for over 18 years</strong> and spinning records for over 25, using music as a way to <strong>heal, connect, and uplift</strong>. To Mike, music isn't just sound, it is medicine.</p>
+                        <p>His vision of The Spot was to create a space that brings people together, a place for <strong>artists, musicians, and free spirits</strong> to share their gifts, and for everyone who walks through the door to feel seen, welcomed, and inspired. He did not open a bar, he started a <strong>movement</strong>. The Spot is a platform where guests can celebrate <strong>art, love, and connection</strong>, and <strong>local talent</strong> can express themselves and grow.</p>
+                    </div>
+                </article>
+
+                <article class="team-member">
+                    <img src="images/marsspot.jpg" alt="Marissa Faltings" class="team-member-image">
+                    <div class="team-member-info">
+                        <h3>Marissa Faltings</h3>
+                        <p class="role">General Manager</p>
+                        <p>Mars is a <strong>professional violinist, private violin and viola teacher, and trained luthier</strong> with a lifelong passion for music, craftsmanship, and creativity. Her journey as an artist has taken her from concert stages to classrooms, guided by a love for <strong>expression, connection, and artistry</strong>.</p>
+                        <p>After taking a personal step back from alcohol, Mars discovered the world of <strong>kava</strong> in a Long Island kava bar. She quickly fell in love—not just with the calming benefits, but with the <strong>culture of community, wellness, and belonging</strong> it offered. She relocated to Nashua and joined Mike on this adventure. She brings her love of hospitality and her passion for creating <strong>warm, joyful, and healthy experiences</strong> for every guest.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>The Spot • Kava Bar and Music</strong></p>
+            <p>217 Main Street   •   (603) 718-4732   •   Open Daily 2pm - 11pm</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+    </script>
+</body>
+</html>
