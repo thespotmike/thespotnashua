@@ -1,422 +1,878 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Spot - Kava Bar & Social Lounge</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Skip to main content link for accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #000;
-            color: #fff;
-            padding: 8px;
-            text-decoration: none;
-            z-index: 100;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        /* Navigation */
-        nav {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            color: red;
-            -webkit-text-stroke: 1px white;
-            font-family: 'Yellowtail', cursive;
-            font-size: 2rem; /* Slightly larger since script fonts can feel smaller */
-            font-weight: normal; /* Yellowtail only has one weight */
-            text-decoration: none;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            color: #fff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .nav-menu a:hover,
-        .nav-menu a:focus {
-            background: rgba(255,255,255,0.1);
-            outline: 2px solid #fff;
-            outline-offset: 2px;
-        }
-
-        .nav-menu a[aria-current="page"] {
-            background: rgba(255,255,255,0.2);
-        }
-
-        /* Mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .menu-toggle:focus {
-            outline: 2px solid #fff;
-            outline-offset: 2px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background-image: url('images/thespotnashua.jpg'); /* Replace with your image path */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: #fff;
-            flex: 1; /* Take up remaining space between nav and footer */
-            padding: 4rem 20px;
-            text-align: center;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Dark overlay for better text legibility */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
-        /* Ensure text appears above overlay */
-        .hero > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
-        }
-
-        /* Main Content - Hidden sections */
-        main {
-            display: none; /* Hide main entirely when all content is hidden */
-        }
-
-        .intro-section {
-            text-align: center;
-            margin-bottom: 4rem;
-            display: none; /* Hidden as requested */
-        }
-
-        .intro-section h2 {
-            font-size: 2.5rem;
-            color: #2c5f4f;
-            margin-bottom: 1.5rem;
-        }
-
-        .intro-section p {
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #555;
-        }
-
-        /* Features Grid */
-        .features {
-            display: none; /* Hidden as requested */
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            background: #f8f8f8;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            color: #2c5f4f;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .feature-card p {
-            color: #666;
-        }
-
-        /* Footer */
-        footer {
-            background: #000000;
-            color: #fff;
-            text-align: center;
-            padding: 1rem 20px;
-            flex-shrink: 0;
-            /* Removed margin-top: 4rem */
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: relative;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-menu {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(0, 0, 0, 0.6);
-                flex-direction: column;
-                gap: 0;
-                padding: 1rem 0;
-                display: none;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
-
-            .nav-menu a {
-                padding: 1rem 20px;
-                border-radius: 0;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .intro-section h2 {
-                font-size: 2rem;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Social Media Styles */
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            position: absolute;
-            right: 1.5rem;
-        }
-
-        .social-links a {
-            color: #fff;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover,
-        .social-links a:focus {
-            color: #4a8f7a;
-        }
-
-        .social-links a:focus {
-            outline: 2px solid #fff;
-            outline-offset: 2px;
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Spot | Kava Bar &amp; Live Music in Nashua NH</title>
+  <meta name="description" content="The Spot is Nashua's alcohol-free kava bar and live music venue at 217 Main St. Premium kava, craft coffee, mocktails, and live shows every weekend."/>
+  <meta property="og:title" content="The Spot | Kava Bar &amp; Live Music in Nashua NH"/>
+  <meta property="og:description" content="Nashua's alcohol-free kava bar and live music venue at 217 Main St. Premium kava, craft coffee, mocktails, and live shows every weekend."/>
+  <meta property="og:image" content="https://thespotnashua.com/images/og-landing.jpg?v=2026-05-15"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="https://thespotnashua.com/images/og-landing.jpg?v=2026-05-15"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://thespotnashua.com/"/>
+  <link rel="icon" type="image/jpeg" href="images/logothespot.jpg"/>
+  <link rel="canonical" href="https://thespotnashua.com/"/>
+  <link rel="preload" as="image" type="image/webp" href="images/webp/rockstarpt2.webp?v=2" fetchpriority="high"/>
+  <!-- BandJamthespot.webp (2nd hero slide) is intentionally NOT preloaded.
+       It isn't the LCP element; a second high-priority preload was
+       stealing bandwidth from rockstarpt2 (the LCP) and inflating its
+       resource-load-delay. It still loads on demand when the slider
+       cycles to it. -->
+  <link rel="preload" as="font" type="font/woff2" href="fonts/norwester.woff2" crossorigin/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="geo.region" content="US-NH"/>
+  <meta name="geo.placename" content="Nashua"/>
+  <meta name="geo.position" content="42.7654;-71.4676"/>
+  <meta name="ICBM" content="42.7654, -71.4676"/>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/roboto-condensed-400.woff2" crossorigin/>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/roboto-condensed-700.woff2" crossorigin/>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/arizonia-400.woff2" crossorigin/>
+  <style>@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/roboto-condensed-400.woff2') format('woff2')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/roboto-condensed-700.woff2') format('woff2')}@font-face{font-family:Arizonia;font-style:normal;font-weight:400;font-display:swap;src:url('fonts/arizonia-400.woff2') format('woff2')}@font-face{font-family:Norwester;src:url('fonts/norwester.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}:root{--silver-primary:#C0C0C0;--silver-dark:#A8A8A8;--silver-link:#E8E8E8;--dark-deep:#0a0a0a;--black:#000;--dark-bg:#212121;--dark-mid:#2B2B2B;--text-body:#444;--text-heading:#1a1a1a;--white:#FFF;--border-light:rgba(255,255,255,.3);--maroon:#800020;--maroon-light:#9B2335;--red-accent:#B22234}*,::after,::before{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;scroll-padding-top:80px}body{font-family:'Roboto Condensed',Helvetica,Arial,sans-serif;font-size:16px;line-height:1.7;color:var(--text-body);background:var(--white);overflow-x:hidden}img{max-width:100%;display:block;height:auto}a{text-decoration:none;color:inherit}ul{list-style:none}.container{max-width:1240px;margin:0 auto;padding:0 20px}.skip-to-content{position:absolute;top:0;left:16px;z-index:10000;padding:12px 24px;background:var(--dark-deep);color:#fff;font-family:'Roboto Condensed',sans-serif;font-size:14px;font-weight:700;text-decoration:none;border-radius:0 0 8px 8px;transform:translateY(-150%);transition:transform .2s ease}.skip-to-content:focus{transform:translateY(0)}.site-header{position:fixed;top:0;left:0;right:0;background:var(--white);z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.08)}.header-inner{display:flex;align-items:center;justify-content:space-between;height:70px;padding:0 30px;max-width:1400px;margin:0 auto}.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}.logo-icon{width:50px;height:50px;object-fit:contain;border-radius:4px}.logo-text-block{display:flex;flex-direction:column;line-height:1.1;background:linear-gradient(135deg,rgba(128,0,32,.08) 0,rgba(155,35,53,.06) 100%);padding:4px 10px;border-radius:6px}.logo-main{font-family:Norwester,Helvetica,Arial,sans-serif;font-size:18px;color:var(--black);letter-spacing:.05em;text-transform:uppercase}.logo-sub{font-family:Norwester,Helvetica,Arial,sans-serif;font-size:9px;color:var(--text-body);text-transform:uppercase;letter-spacing:.15em}.hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:0 0;border:none}.hamburger span{display:block;width:28px;height:2px;background:var(--black);transition:transform .3s ease,opacity .3s ease}.nav-overlay{position:fixed;top:70px;right:0;width:300px;height:calc(100vh - 70px);background:var(--white);box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:999;transform:translateX(100%);transition:transform .35s ease;overflow-y:auto;padding:20px 0}.nav-overlay-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:998}.page-wrap{padding-top:70px}.desktop-nav{display:none}@media (min-width:901px){.desktop-nav{display:flex;align-items:center;gap:2px;margin-left:auto}.desktop-nav a{font-family:Norwester,Helvetica,Arial,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-heading);padding:8px 14px;transition:color .2s;white-space:nowrap}.desktop-nav a.active{background:linear-gradient(135deg,rgba(128,0,32,.12) 0,rgba(155,35,53,.08) 100%);color:var(--maroon);border-radius:6px}.desktop-nav .nav-subscribe{font-size:11px;padding:8px 20px;border-radius:50px;background:var(--maroon);color:var(--white);margin-left:6px;font-family:Norwester,Helvetica,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;white-space:nowrap}.hamburger{display:none!important}}.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.hero-photo-overlay{position:absolute;inset:0;background:rgba(10,10,10,.55);z-index:1}.hero-slider{position:relative;height:100vh;min-height:600px;overflow:hidden;background:#1a1a1a}.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;display:flex;align-items:center;justify-content:center}.hero-slide.active{opacity:1;z-index:2}.hero-slide img{width:100%;height:100%;object-fit:cover}.hero-content{position:relative;z-index:10;text-align:center;padding:0 20px}.hero-bula{font-family:Arizonia,cursive;font-size:clamp(50px,7vw,80px);color:var(--white);display:block;margin-bottom:-10px;text-shadow:0 2px 20px rgba(0,0,0,.2)}.hero-welcome{font-family:Norwester,Helvetica,Arial,sans-serif;font-size:clamp(60px,12vw,160px);color:var(--white);text-shadow:0 4px 30px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.4);display:block;line-height:1;letter-spacing:.02em}.hero-tribe{font-family:Norwester,Helvetica,Arial,sans-serif;font-size:clamp(50px,9vw,120px);color:var(--white);display:block;line-height:.9;letter-spacing:-.02em;text-shadow:0 4px 30px rgba(0,0,0,.2)}.hero-badge{display:inline-block;background:var(--silver-primary);color:var(--dark-deep);padding:6px 22px;border-radius:50px;font-family:'Roboto Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin:16px 0}.hero-drink-btn{position:relative;display:inline-block;padding:12px 36px;border:2px solid var(--maroon);border-radius:6px;color:var(--white);font-family:'Roboto Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--maroon);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}.hero-wave{position:absolute;bottom:-1px;left:0;right:0;z-index:15;line-height:0}.hero-wave svg{display:block;width:100%}.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.1);color:var(--white);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}.slider-arrow-prev{left:20px}.slider-arrow-next{right:20px}.slider-dots{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:10px}.slider-dot{width:44px;height:44px;padding:0;background:transparent;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.slider-dot::before{content:'';width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5)}.slider-dot.active::before{background:#fff}</style>
+  <link rel="preload" as="style" href="css/styles.css?v=9" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/styles.css?v=9"></noscript>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "The Spot Kava Bar & Music",
+    "url": "https://thespotnashua.com",
+    "publisher": { "@id": "https://thespotnashua.com/#business" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarOrPub",
+    "@id": "https://thespotnashua.com/#business",
+    "name": "The Spot Kava Bar & Music",
+    "description": "Alcohol-free kava bar and live music venue in downtown Nashua, NH. Premium kava, craft coffee, creative mocktails, and live entertainment.",
+    "url": "https://thespotnashua.com",
+    "telephone": "+1-603-718-4732",
+    "email": "thespotnashua@gmail.com",
+    "image": "https://thespotnashua.com/images/og-landing.jpg",
+    "logo": "https://thespotnashua.com/images/logothespot.jpg",
+    "hasMap": "https://www.google.com/maps/place/The+Spot/@42.7654,-71.4676,17z/",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "217 Main Street",
+      "addressLocality": "Nashua",
+      "addressRegion": "NH",
+      "postalCode": "03060",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 42.7654,
+      "longitude": -71.4676
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+        "opens": "15:00",
+        "closes": "23:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday", "Saturday"],
+        "opens": "15:00",
+        "closes": "01:00"
+      }
+    ],
+    "founder": {
+      "@type": "Person",
+      "name": "Michael McDowell",
+      "jobTitle": "Owner & Founder"
+    },
+    "servesCuisine": ["Kava", "Coffee", "Mocktails"],
+    "priceRange": "$$",
+    "paymentAccepted": "Cash, Credit Card",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "bestRating": "5",
+      "reviewCount": "85"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Jammie LaBarge" },
+        "reviewBody": "My favorite place to relax and unwind. The atmosphere is amazing. I love all the different types of events and live music that they have."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Just Lisa" },
+        "reviewBody": "Great place to sit for a good cup of coffee but even better strawberry lemonade! Very relaxed atmosphere with plenty of comfortable seating."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Crystal Evans" },
+        "reviewBody": "Amazing coffee. Great staff. Clean and professional atmosphere! It is so nice that there is such a place that exists!"
+      }
+    ],
+    "areaServed": [
+      { "@type": "City", "name": "Nashua, NH" },
+      { "@type": "City", "name": "Hudson, NH" },
+      { "@type": "City", "name": "Merrimack, NH" },
+      { "@type": "City", "name": "Manchester, NH" },
+      { "@type": "City", "name": "Hollis, NH" },
+      { "@type": "City", "name": "Litchfield, NH" },
+      { "@type": "City", "name": "Pelham, NH" }
+    ],
+    "sameAs": [
+      "https://instagram.com/thespotnashua",
+      "https://www.facebook.com/p/The-Spot-61572943945372/",
+      "https://www.tiktok.com/@thespotnashua",
+      "https://www.yelp.com/biz/the-spot-nashua",
+      "https://maps.app.goo.gl/ie4rLs77c5vThdxR8"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://thespotnashua.com/" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicVenue",
+    "name": "The Spot",
+    "description": "Live music venue and kava bar in downtown Nashua, NH. Acoustic, full band, solo artists, and open mic nights. Now booking performers.",
+    "url": "https://thespotnashua.com",
+    "telephone": "+1-603-718-4732",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "217 Main Street",
+      "addressLocality": "Nashua",
+      "addressRegion": "NH",
+      "postalCode": "03060",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 42.7654,
+      "longitude": -71.4676
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+        "opens": "15:00",
+        "closes": "23:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday", "Saturday"],
+        "opens": "15:00",
+        "closes": "01:00"
+      }
+    ],
+    "priceRange": "$$",
+    "sameAs": [
+      "https://instagram.com/thespotnashua",
+      "https://www.facebook.com/p/The-Spot-61572943945372/",
+      "https://www.tiktok.com/@thespotnashua",
+      "https://www.yelp.com/biz/the-spot-nashua",
+      "https://maps.app.goo.gl/ie4rLs77c5vThdxR8"
+    ],
+    "amenityFeature": [
+      { "@type": "LocationFeatureSpecification", "name": "PA Sound System", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Stage Lighting", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Performance Stage", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "Merch Table Space", "value": true },
+      { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true }
+    ]
+  }
+  </script>
+<!-- Plausible analytics -->
+<script defer data-domain="thespotnashua.com" src="https://plausible.io/js/script.js"></script>
+<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)};</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is The Spot in Nashua NH?","acceptedAnswer":{"@type":"Answer","text":"The Spot is an alcohol-free kava bar and live music venue located at 217 Main Street in downtown Nashua, NH. We serve premium kava, craft coffee, mocktails, and live entertainment Monday through Saturday."}},{"@type":"Question","name":"Does The Spot serve alcohol?","acceptedAnswer":{"@type":"Answer","text":"No. The Spot is 100% alcohol-free. We serve traditional and instant kava preparations, craft coffee, creative mocktails, and non-alcoholic beverages in a welcoming, sober environment."}},{"@type":"Question","name":"What are The Spot's hours in Nashua?","acceptedAnswer":{"@type":"Answer","text":"The Spot is open Monday through Thursday 3PM-11PM, Friday and Saturday 3PM-1AM, and closed on Sundays. Hours may vary on holidays and special event nights."}},{"@type":"Question","name":"Where is The Spot kava bar located?","acceptedAnswer":{"@type":"Answer","text":"The Spot is located at 217 Main Street, Nashua, NH 03060, in the heart of downtown Nashua. Street parking is available nearby."}},{"@type":"Question","name":"What is kava?","acceptedAnswer":{"@type":"Answer","text":"Kava is a traditional South Pacific root beverage known for its calming, stress-relieving effects. It is legal, non-alcoholic, and FDA-recognized. The Spot serves kava in traditional shell and modern blended preparations."}},{"@type":"Question","name":"Does The Spot have live music?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Spot hosts live music, acoustic sets, open mic nights, comedy, and DJ nights regularly. Check our live music calendar for upcoming shows."}}]}
+</script>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-to-content">Skip to content</a>
 
-    <nav role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
-            <a href="index.html" class="logo">The Spot</a>
-            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu">
-                Menu
-            </button>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html" aria-current="page">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="calendar.html">Calendar</a></li>
-                <li><a href="menu.html">Menu</a></li>
-            </ul>
-        </div>
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<header class="site-header">
+  <div class="header-inner">
+    <!-- Logo -->
+    <a href="index.html" class="logo-wrap">
+      <picture><source srcset="images/webp/logothespot-small.webp" type="image/webp"><img src="images/logothespot.jpg" alt="The Spot" class="logo-icon" width="50" height="50" /></picture>
+      <div class="logo-text-block">
+        <span class="logo-main">The Spot</span>
+        <span class="logo-sub">Kava Bar &amp; Music &bull; Nashua NH</span>
+      </div>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main Navigation">
+      <a href="index.html"class="active">Home</a>
+      <a href="pages/live-music.html">Live Music Calendar</a>
+      <a href="pages/kava.html">Kava</a>
+      <a href="pages/menu.html">Menu</a>
+      <a href="pages/book-a-spot.html">Book Your Band</a>
+      <a href="pages/about.html">About</a>
+      <a href="pages/contact.html">Contact</a>
     </nav>
 
-    <header class="hero" id="main-content">
-        <h1>Welcome to The Spot</h1>
-        <p>Your community hub for connection, culture, and kava</p>
-    </header>
+    <!-- Hamburger -->
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
 
-    <main>
-        <section class="intro-section">
-            <h2>A Space to Gather & Unwind</h2>
-            <p>The Spot is more than just a kava bar—it's a vibrant community space where friends meet, ideas flow, and connections happen. Enjoy our curated selection of kava, coffee, mocktails, and delicious bites in a welcoming, alcohol-free environment.</p>
-        </section>
+<!-- Nav Overlay -->
+<nav class="nav-overlay" aria-label="Main Navigation">
+  <ul>
+    <li><a href="index.html"class="active">Home</a></li>
+    <li><a href="pages/live-music.html">Live Music Calendar</a></li>
+    <li><a href="pages/kava.html">Kava</a></li>
+    <li><a href="pages/menu.html">Menu</a></li>
+    <li><a href="pages/book-a-spot.html">Book Your Band</a></li>
+    <li><a href="pages/about.html">About</a></li>
+    <li><a href="pages/contact.html">Contact</a></li>
+  </ul>
+</nav>
+<div class="nav-overlay-backdrop"></div>
 
-        <section class="features">
-            <article class="feature-card">
-                <div class="feature-icon" aria-hidden="true">🍵</div>
-                <h3>Premium Kava</h3>
-                <p>Experience the authentic relaxation of traditional Pacific Island kava, sourced from the finest suppliers and prepared with care.</p>
-            </article>
+<!-- ============================================================
+     PAGE CONTENT
+============================================================ -->
+<main class="page-wrap" id="main-content">
 
-            <article class="feature-card">
-                <div class="feature-icon" aria-hidden="true">🎵</div>
-                <h3>Live Music</h3>
-                <p>Enjoy live performances in our dedicated music corner featuring local artists and diverse genres throughout the week.</p>
-            </article>
+  <!-- ======================================================
+       SECTION 1, Hero Slider
+  ====================================================== -->
+  <section class="hero-slider">
 
-            <article class="feature-card">
-                <div class="feature-icon" aria-hidden="true">☕</div>
-                <h3>Coffee & More</h3>
-                <p>From expertly crafted coffee to creative mocktails and tasty bites, we have something for everyone to enjoy.</p>
-            </article>
+    <!-- Slide 1 -->
+    <div class="hero-slide hero-slide-1 active">
+      <picture><source srcset="images/webp/rockstarpt2.webp?v=2" type="image/webp"><img src="images/rockstarpt2.jpg" alt="Live performer on stage at The Spot Nashua" class="hero-photo" width="1200" height="1600" fetchpriority="high" decoding="async" /></picture>
+      <div class="hero-photo-overlay"></div>
 
-            <article class="feature-card">
-                <div class="feature-icon" aria-hidden="true">🛋️</div>
-                <h3>Comfortable Space</h3>
-                <p>Relax in our spacious lounge with cozy couches, intimate tables, and a welcoming bar—perfect for work, study, or socializing.</p>
-            </article>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <p><strong>The Spot  •  Kava Bar and Music</strong></p>
-            <p>217 Main Street, Nashua, NH 03060  •  Open Daily 3pm - 11pm</p>
-            <div class="social-links">
-                <a href="https://www.instagram.com/thespotnashua/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                </a>
-                <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                    </svg>
-                </a>
-            </div>
+      <div class="hero-content">
+        <span class="hero-bula">Welcome to</span>
+        <h1 class="hero-h1">
+          <span class="hero-h1-name">The Spot</span>
+          <span class="hero-h1-tag">Kava Bar &amp; Live Music<br>in Nashua, NH</span>
+        </h1>
+        <div class="hero-badge">Kava &bull; Coffee &bull; Live Music</div>
+        <br/>
+        <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <a href="pages/menu.html" class="hero-drink-btn hero-cta-btn" data-animated="true">MENU</a>
+          <a href="pages/book-a-spot.html" class="hero-drink-btn hero-cta-btn" data-animated="true">BOOK YOUR BAND</a>
         </div>
-    </footer>
-    <script>
-        // Mobile menu toggle with accessibility
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+      </div>
+    </div>
 
-        menuToggle.addEventListener('click', function() {
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', !isExpanded);
-            navMenu.classList.toggle('active');
-        });
+    <!-- Slide 2 -->
+    <div class="hero-slide hero-slide-2">
+      <picture><source srcset="images/webp/BandJamthespot.webp?v=3" type="image/webp"><img src="images/BandJamthespot.jpg" alt="Live band performing on stage at The Spot" class="hero-photo" width="1200" height="1197" loading="lazy" decoding="async" /></picture>
+      <div class="hero-photo-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-bula" style="font-size:clamp(40px,6vw,70px);">Feel the Vibe</span>
+        <span class="hero-tribe" style="font-size:clamp(40px,8vw,100px);">LIVE MUSIC</span>
+        <div class="hero-badge">Zero Alcohol &bull; All Natural</div>
+        <br/>
+        <a href="pages/live-music.html" class="hero-drink-btn hero-cta-btn" data-animated="true">SEE EVENTS</a>
+      </div>
+    </div>
 
-        // Close mobile menu when clicking a link
-        const navLinks = document.querySelectorAll('.nav-menu a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-            });
-        });
+    <!-- Slide 3 -->
+    <div class="hero-slide hero-slide-3">
+      <picture><source srcset="images/webp/grouppic.webp?v=2" type="image/webp"><img src="images/grouppic.jpg" alt="Group of friends at The Spot Nashua" class="hero-photo" width="1200" height="900" loading="lazy" /></picture>
+      <div class="hero-photo-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-bula" style="font-size:clamp(36px,5vw,60px);">Open This Week</span>
+        <span class="hero-welcome" style="font-size:clamp(34px,5.5vw,70px);">Mon&ndash;Thu 3&ndash;11PM</span>
+        <span class="hero-tribe" style="font-size:clamp(28px,4.5vw,60px);">Fri&ndash;Sat 3PM&ndash;1AM &bull; Sun Closed</span>
+        <div class="hero-badge">217 Main St &bull; Downtown Nashua</div>
+        <br/>
+        <a href="https://maps.google.com/?q=217+Main+St+Nashua+NH" target="_blank" rel="noopener noreferrer" class="hero-drink-btn hero-cta-btn" data-animated="true">GET DIRECTIONS</a>
+      </div>
+    </div>
 
-        // Close mobile menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                menuToggle.focus();
-            }
-        });
+    <!-- Controls -->
+    <button class="slider-arrow slider-arrow-prev" aria-label="Previous">&#8249;</button>
+    <button class="slider-arrow slider-arrow-next" aria-label="Next">&#8250;</button>
+
+    <!-- Dots -->
+    <div class="slider-dots">
+      <button class="slider-dot active" aria-label="Slide 1"></button>
+      <button class="slider-dot" aria-label="Slide 2"></button>
+      <button class="slider-dot" aria-label="Slide 3"></button>
+    </div>
+
+    <!-- Bottom Wave -->
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       TEMPORARY EVENT PROMO  [SCRUM-278]
+       Safe to delete this whole <section id="spot-featured-events"> block plus
+       its trailing <script> after 2026-07-18. It also self-removes in-browser
+       once the date passes (see the script at the end of the block), so no
+       manual cleanup is strictly required.
+  ======================================================================== -->
+  <section id="spot-featured-events" aria-label="Upcoming events at The Spot" style="background:linear-gradient(180deg,#0F272E 0%,#0a1a1f 100%);border-top:2px solid #42AFB9;padding:clamp(2.5rem,5vw,4rem) clamp(1rem,4vw,3rem);">
+    <div class="container" style="max-width:1000px;">
+      <div class="animate-on-scroll" style="text-align:center;margin-bottom:clamp(2rem,4vw,3rem);">
+        <span class="section-label text-teal" style="color:#89E3EB;letter-spacing:.18em;font-size:.8rem;text-transform:uppercase;">Happening This Weekend</span>
+        <h2 style="font-family:'Norwester',Helvetica,Arial,sans-serif;color:#fff;font-size:clamp(1.8rem,4vw,2.6rem);text-transform:uppercase;letter-spacing:.04em;margin:.4rem 0 .5rem;">Upcoming at The Spot</h2>
+        <p style="color:rgba(255,255,255,.65);font-size:1rem;max-width:52ch;margin:0 auto;">Two nights of rhythm and live music. All ages, alcohol-free. 217 Main Street, downtown Nashua.</p>
+        <p style="margin:1.1rem 0 0;"><a href="https://www.eventbrite.com/e/1994245992447?aff=oddtdtcreator" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="font-size:1rem;padding:12px 26px;">Get Tickets on Eventbrite</a></p>
+      </div>
+
+      <!-- Event 1: Drum Circle, Friday July 17 -->
+      <article class="spot-event animate-on-scroll" data-event-end="2026-07-18T02:00:00-04:00" style="display:flex;gap:clamp(1.4rem,3vw,2.6rem);flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:clamp(2.2rem,4vw,3.4rem);">
+        <div style="flex:1 1 340px;max-width:480px;border:1px solid rgba(66,175,185,.35);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
+          <picture>
+            <source srcset="images/webp/event-drum-circle-jul17.webp" type="image/webp">
+            <img src="images/event-drum-circle-jul17.jpg" alt="Drum Circle at The Spot Nashua, Friday July 17 at 8 PM. No experience needed, all rhythms, all people, one circle." width="1200" height="982" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;" />
+          </picture>
+        </div>
+        <div style="flex:1 1 320px;max-width:440px;">
+          <span style="display:inline-block;background:#42AFB9;color:#04191d;font-family:'Roboto Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;">Friday, July 17 &bull; 8:00 PM</span>
+          <h3 style="font-family:'Norwester',Helvetica,Arial,sans-serif;color:#fff;font-size:clamp(1.8rem,3.4vw,2.4rem);text-transform:uppercase;letter-spacing:.03em;margin:.7rem 0 .25rem;line-height:1.1;">Drum Circle</h3>
+          <p style="color:#89E3EB;font-family:'Roboto Condensed',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.9rem;margin:0 0 .7rem;">Feel the beat. Share the vibe.</p>
+          <p style="color:rgba(255,255,255,.78);font-size:1rem;line-height:1.65;margin:0 0 1.1rem;">An evening of rhythm, connection, and sound. Percussion begins at 8:00 PM. No experience needed. Bring a drum if you have one, or just come feel the energy. All rhythms, all people, one circle.</p>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+            <a href="https://www.eventbrite.com/e/1994245992447?aff=oddtdtcreator" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="font-size:1rem;padding:12px 26px;">Get Tickets on Eventbrite</a>
+            <a href="https://maps.google.com/?q=217+Main+St+Nashua+NH" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light" style="font-size:1rem;padding:12px 26px;border:2px solid rgba(255,255,255,.4);color:#fff;border-radius:6px;">Get Directions</a>
+            <a href="pages/live-music.html" class="btn btn-outline-light" style="font-size:1rem;padding:12px 26px;border:2px solid rgba(255,255,255,.4);color:#fff;border-radius:6px;">See Full Calendar</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event 2: Vale's End, Saturday July 18 -->
+      <article class="spot-event animate-on-scroll" data-event-end="2026-07-19T02:00:00-04:00" style="display:flex;gap:clamp(1.4rem,3vw,2.6rem);flex-wrap:wrap;align-items:center;justify-content:center;flex-direction:row-reverse;">
+        <div style="flex:1 1 320px;max-width:400px;border:1px solid rgba(66,175,185,.35);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
+          <picture>
+            <source srcset="images/webp/event-valesend-jul18.webp" type="image/webp">
+            <img src="images/event-valesend-jul18.jpg" alt="Flyer for Vale's End, Tumbletoads, and Moonlight Bandits live at The Spot Nashua, Saturday July 18 at 8 PM, ten dollar cover" width="960" height="1200" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;" />
+          </picture>
+        </div>
+        <div style="flex:1 1 320px;max-width:440px;">
+          <span style="display:inline-block;background:#42AFB9;color:#04191d;font-family:'Roboto Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;">Saturday, July 18 &bull; 8:00 PM</span>
+          <h3 style="font-family:'Norwester',Helvetica,Arial,sans-serif;color:#fff;font-size:clamp(1.8rem,3.4vw,2.4rem);text-transform:uppercase;letter-spacing:.03em;margin:.7rem 0 .5rem;line-height:1.1;">Vale's End, Tumbletoads &amp; Moonlight Bandits</h3>
+          <p style="color:rgba(255,255,255,.78);font-size:1rem;line-height:1.65;margin:0 0 1.1rem;">Three bands take the stage for one loud night at The Spot. Music starts at 8:00 PM. Ten dollar cover at the door, all ages, alcohol-free.</p>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+            <a href="https://maps.google.com/?q=217+Main+St+Nashua+NH" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="font-size:1rem;padding:12px 26px;">Get Directions</a>
+            <a href="pages/live-music.html" class="btn btn-outline-light" style="font-size:1rem;padding:12px 26px;border:2px solid rgba(255,255,255,.4);color:#fff;border-radius:6px;">See Full Calendar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Drum Circle at The Spot",
+      "description": "A community drum circle at The Spot Kava Bar & Music in downtown Nashua, NH. Percussion begins at 8 PM. No experience needed, bring a drum or just come feel the rhythm. All ages, alcohol-free.",
+      "startDate": "2026-07-17T20:00:00-04:00",
+      "endDate": "2026-07-17T23:00:00-04:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "image": "https://thespotnashua.com/images/event-drum-circle-jul17.jpg",
+      "performer": { "@type": "PerformingGroup", "name": "The Spot Drum Circle" },
+      "location": {
+        "@type": "BarOrPub",
+        "name": "The Spot Kava Bar & Music",
+        "url": "https://thespotnashua.com",
+        "telephone": "+1-603-718-4732",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "217 Main Street",
+          "addressLocality": "Nashua",
+          "addressRegion": "NH",
+          "postalCode": "03060",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": { "@type": "Organization", "name": "The Spot Kava Bar & Music", "url": "https://thespotnashua.com" }
+    }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicEvent",
+      "name": "Vale's End, Tumbletoads, and Moonlight Bandits at The Spot",
+      "description": "Three bands, Vale's End, Tumbletoads, and Moonlight Bandits, live at The Spot Kava Bar & Music in downtown Nashua, NH. Music at 8 PM, ten dollar cover, all ages, alcohol-free.",
+      "startDate": "2026-07-18T20:00:00-04:00",
+      "endDate": "2026-07-18T23:59:00-04:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "isAccessibleForFree": false,
+      "image": "https://thespotnashua.com/images/event-valesend-jul18.jpg",
+      "performer": [
+        { "@type": "MusicGroup", "name": "Vale's End" },
+        { "@type": "MusicGroup", "name": "Tumbletoads" },
+        { "@type": "MusicGroup", "name": "Moonlight Bandits" }
+      ],
+      "location": {
+        "@type": "BarOrPub",
+        "name": "The Spot Kava Bar & Music",
+        "url": "https://thespotnashua.com",
+        "telephone": "+1-603-718-4732",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "217 Main Street",
+          "addressLocality": "Nashua",
+          "addressRegion": "NH",
+          "postalCode": "03060",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": { "@type": "Organization", "name": "The Spot Kava Bar & Music", "url": "https://thespotnashua.com" },
+      "offers": { "@type": "Offer", "price": "10", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://thespotnashua.com/", "validFrom": "2026-07-14T00:00:00-04:00" }
+    }
+    </script>
+    <script>
+      /* Self-expiring promo: hide each event once its own end time passes, and
+         remove the whole band after every event is over. Self-maintaining, so
+         no manual cleanup is required. */
+      (function () {
+        var band = document.getElementById('spot-featured-events');
+        if (!band) return;
+        var now = new Date(), anyUpcoming = false;
+        band.querySelectorAll('.spot-event[data-event-end]').forEach(function (ev) {
+          if (now > new Date(ev.getAttribute('data-event-end'))) ev.style.display = 'none';
+          else anyUpcoming = true;
+        });
+        if (!anyUpcoming) band.remove();
+      })();
+    </script>
+  </section>
+
+  <section style="background:#0a0a0a;padding:1.5rem clamp(1rem,4vw,3rem);border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);">
+  <div style="max-width:860px;margin:0 auto;">
+    <p style="font-size:.88rem;color:#9ca3af;line-height:1.75;margin-bottom:.6rem;"><strong style="color:#C0C0C0;">What is The Spot?</strong> The Spot is an alcohol-free kava bar and live music venue at 217 Main Street in downtown Nashua, NH. We serve premium kava, craft coffee, mocktails, and live entertainment. Open Monday through Thursday 3PM-11PM, Friday and Saturday 3PM-1AM.</p>
+    <p style="font-size:.88rem;color:#9ca3af;line-height:1.75;margin-bottom:.6rem;"><strong style="color:#C0C0C0;">Does The Spot serve alcohol?</strong> No. The Spot is 100% alcohol-free. Every drink on our menu is non-alcoholic, making us welcoming to everyone including those in recovery.</p>
+    <p style="font-size:.88rem;color:#9ca3af;line-height:1.75;"><strong style="color:#C0C0C0;">Where is The Spot located?</strong> 217 Main Street, Nashua, NH 03060. Call us at (603) 718-4732.</p>
+  </div>
+</section>
+
+  <!-- ======================================================
+       SECTION 2, Maps + Reviews
+  ====================================================== -->
+
+  <!-- Wave (white to dark) -->
+  <div class="wave-divider" style="background:#fff;">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="var(--dark-deep)"/>
+    </svg>
+  </div>
+
+  <section class="reviews-section maps-reviews-section" data-bg="band" aria-label="Location and Reviews">
+    <div class="container">
+
+      <!-- Section Header -->
+      <div class="reviews-header animate-on-scroll">
+        <span class="section-label text-teal">FIND US &amp; REVIEWS</span>
+        <h2 class="reviews-heading-outline">5-STAR EXPERIENCE</h2>
+        <p class="reviews-subheading">Rated 5 Stars Across Every Platform</p>
+        <div class="reviews-stars-row" role="img" aria-label="5 out of 5 stars">
+          <span class="review-star-lg" aria-hidden="true">&#9733;</span>
+          <span class="review-star-lg" aria-hidden="true">&#9733;</span>
+          <span class="review-star-lg" aria-hidden="true">&#9733;</span>
+          <span class="review-star-lg" aria-hidden="true">&#9733;</span>
+          <span class="review-star-lg" aria-hidden="true">&#9733;</span>
+        </div>
+        <span class="reviews-badge">85+ Reviews</span>
+      </div>
+
+      <!-- Two-Column Grid: Map + Reviews -->
+      <div class="maps-reviews-grid animate-on-scroll">
+
+        <!-- Left Column: Google Maps (lazy-loaded via IntersectionObserver - js/main.js) -->
+        <div class="map-directions-card">
+          <div class="map-placeholder"
+               data-map-embed="https://maps.google.com/maps?q=217%20Main%20Street%20Nashua%20NH%2003060&t=&z=16&ie=UTF8&iwloc=&output=embed"
+               data-map-title="The Spot location on Google Maps"
+               style="width:100%;height:350px;background:#0F272E;display:flex;align-items:center;justify-content:center;color:#89E3EB;font-family:'Roboto Condensed',sans-serif;font-size:15px;letter-spacing:0.05em;text-transform:uppercase;border:0;"
+               role="img"
+               aria-label="The Spot location on Google Maps. Map will load when scrolled into view.">
+            <span>Loading map…</span>
+          </div>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=217+Main+Street+Nashua+NH+03060"
+             target="_blank" rel="noopener noreferrer" class="map-info-bar">
+            <span class="map-address">217 Main Street, Nashua, NH 03060</span>
+            <span class="map-cta">Get Directions &#8594;</span>
+          </a>
+        </div>
+
+        <!-- Right Column: Review Carousel -->
+        <div class="review-carousel-column" tabindex="0" aria-label="Customer reviews carousel. Use left and right arrow keys to navigate.">
+          <div class="review-carousel-wrap">
+            <button class="review-nav-btn review-nav-prev" aria-label="Previous review">&#8249;</button>
+
+            <div class="review-carousel-viewport">
+              <div class="review-carousel-track">
+
+                <div class="review-card" role="group" aria-label="Review 1 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;My favorite place to relax and unwind. The atmosphere is amazing. I love all the different types of events and live music that they have.&rdquo;</p>
+                  <span class="review-card-name">Jammie LaBarge</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 2 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Great place to sit for a good cup of coffee but even better strawberry lemonade! Very relaxed atmosphere with plenty of comfortable seating.&rdquo;</p>
+                  <span class="review-card-name">Just Lisa</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 3 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Stopped in for a meeting. They weren&rsquo;t open yet, but let us sit and have our meeting. The owner even brought us water and offered us coffee.&rdquo;</p>
+                  <span class="review-card-name">Sascha Stroms</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 4 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Amazing vibes great atmosphere! Amazing mocktails! Come check out The Spot! They have board games, and live music!&rdquo;</p>
+                  <span class="review-card-name">Jonathan R. McDowell</span>
+                  <span class="review-card-source review-source-facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2" style="vertical-align:middle;margin-right:4px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 5 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Amazing coffee. Great staff. Clean and professional atmosphere! It is so nice that there is such a place that exists!&rdquo;</p>
+                  <span class="review-card-name">Crystal Evans</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 6 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Every time I go, they treat me like family. The place feels like home. Always a great vibe and even greater people.&rdquo;</p>
+                  <span class="review-card-name">Ric 6MC Everhard</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 7 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Great staff and drinks!! this place is a great place to hang out with friends or meet new people!&rdquo;</p>
+                  <span class="review-card-name">madison barbrick</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 8 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;What more can you ask for? A place where you can listen to live music...Non alcoholic bar with amazing mocktails.&rdquo;</p>
+                  <span class="review-card-name">Denise Griffin</span>
+                  <span class="review-card-source review-source-facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2" style="vertical-align:middle;margin-right:4px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 9 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Best kava bar in New England! The vibes here are unmatched. Live music every weekend and the staff is incredibly welcoming.&rdquo;</p>
+                  <span class="review-card-name">Sarah M.</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 10 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Amazing mocktails and great atmosphere. Love that it&rsquo;s alcohol-free but still has that lounge feel. Mike and the team are awesome!&rdquo;</p>
+                  <span class="review-card-name">Jason R.</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 11 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;We come here every Friday for live music. The bands are always fantastic and the kava is smooth. Our favorite spot in Nashua!&rdquo;</p>
+                  <span class="review-card-name">Amanda L.</span>
+                  <span class="review-card-source review-source-yelp"><svg width="16" height="16" viewBox="0 0 24 24" fill="#D32323" style="vertical-align:middle;margin-right:4px;"><path d="M12.017 16.929c-.167.009-.338-.044-.473-.16l-3.476-3.012c-.2-.174-.26-.44-.15-.673.11-.233.35-.38.61-.374l4.606.106c.26.006.49.157.59.392.1.235.04.504-.158.676l-1.13.978c-.13.113-.262.076-.419.067zm-1.375 2.645c-.005.26-.147.497-.374.613-.228.115-.5.098-.71-.047l-3.07-2.127c-.21-.145-.318-.394-.28-.644.04-.25.208-.458.44-.54l4.367-1.506c.237-.082.497-.02.672.16.175.178.225.44.127.673l-1.172 3.418zm-5.45-4.233c-.247-.053-.44-.245-.502-.49-.063-.246.02-.505.213-.668l4.466-3.77c.173-.148.41-.193.62-.12.212.074.372.25.418.465l.532 2.52c.047.22-.025.447-.19.6-.165.154-.396.22-.62.167l-4.937-1.704zm5.42-7.824l-1.57 4.137c-.1.263-.353.435-.635.43-.283-.005-.53-.184-.62-.45L6.296 6.876c-.088-.26-.014-.546.19-.726.203-.18.49-.23.743-.127l3.7 1.496c.253.102.402.362.384.634-.018.27-.194.508-.453.588l.952-.224z"/></svg>Yelp</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 12 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Such a unique concept! Great coffee during the day, incredible music at night. The grilled cheese is surprisingly good too.&rdquo;</p>
+                  <span class="review-card-name">Tyler K.</span>
+                  <span class="review-card-source review-source-facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2" style="vertical-align:middle;margin-right:4px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</span>
+                </div>
+
+                <div class="review-card" role="group" aria-label="Review 13 of 13">
+                  <div class="review-card-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                  <p class="review-card-text">&ldquo;Finally an alcohol-free nightlife option that doesn&rsquo;t feel like you&rsquo;re missing out. The Spot is exactly what Nashua needed.&rdquo;</p>
+                  <span class="review-card-name">Rachel D.</span>
+                  <span class="review-card-source review-source-google"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Google</span>
+                </div>
+
+              </div>
+            </div>
+
+            <button class="review-nav-btn review-nav-next" aria-label="Next review">&#8250;</button>
+          </div>
+
+          <!-- Carousel Dots -->
+          <div class="review-dots"></div>
+        </div>
+
+      </div>
+
+      <!-- Platform Badges -->
+      <div class="review-platforms animate-on-scroll">
+        <a href="https://search.google.com/local/writereview?placeid=ChIJ2zrYP1qxPYkRnEOxpHVxGp0" target="_blank" rel="noopener noreferrer" class="review-platform-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          <span class="review-platform-name">Google Reviews</span>
+          <span class="review-platform-rating">5.0 &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="review-platform-link">Read Reviews &#8594;</span>
+        </a>
+        <a href="https://www.yelp.com/biz/the-spot-nashua" target="_blank" rel="noopener noreferrer" class="review-platform-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#D32323"><path d="M12.017 16.929c-.167.009-.338-.044-.473-.16l-3.476-3.012c-.2-.174-.26-.44-.15-.673.11-.233.35-.38.61-.374l4.606.106c.26.006.49.157.59.392.1.235.04.504-.158.676l-1.13.978c-.13.113-.262.076-.419.067zm-1.375 2.645c-.005.26-.147.497-.374.613-.228.115-.5.098-.71-.047l-3.07-2.127c-.21-.145-.318-.394-.28-.644.04-.25.208-.458.44-.54l4.367-1.506c.237-.082.497-.02.672.16.175.178.225.44.127.673l-1.172 3.418zm-5.45-4.233c-.247-.053-.44-.245-.502-.49-.063-.246.02-.505.213-.668l4.466-3.77c.173-.148.41-.193.62-.12.212.074.372.25.418.465l.532 2.52c.047.22-.025.447-.19.6-.165.154-.396.22-.62.167l-4.937-1.704zm5.42-7.824l-1.57 4.137c-.1.263-.353.435-.635.43-.283-.005-.53-.184-.62-.45L6.296 6.876c-.088-.26-.014-.546.19-.726.203-.18.49-.23.743-.127l3.7 1.496c.253.102.402.362.384.634-.018.27-.194.508-.453.588l.952-.224z"/></svg>
+          <span class="review-platform-name">Yelp</span>
+          <span class="review-platform-rating">5.0 &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="review-platform-link">Read Reviews &#8594;</span>
+        </a>
+        <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" class="review-platform-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <span class="review-platform-name">Facebook</span>
+          <span class="review-platform-rating">5.0 &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="review-platform-link">Read Reviews &#8594;</span>
+        </a>
+      </div>
+
+      <!-- CTA -->
+      <div class="reviews-cta animate-on-scroll">
+        <a href="https://search.google.com/local/writereview?placeid=ChIJ2zrYP1qxPYkRnEOxpHVxGp0" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="font-family:'Norwester',sans-serif;font-size:clamp(16px,2.5vw,22px);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:16px;display:inline-block;padding:14px 36px;">Love The Spot? Leave Us a Review!</a>
+        <div class="review-cta-icons">
+          <a href="https://search.google.com/local/writereview?placeid=ChIJ2zrYP1qxPYkRnEOxpHVxGp0" target="_blank" rel="noopener noreferrer" class="review-cta-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </a>
+          <a href="https://www.facebook.com/p/The-Spot-61572943945372/reviews" target="_blank" rel="noopener noreferrer" class="review-cta-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+          <a href="https://instagram.com/thespotnashua" target="_blank" rel="noopener noreferrer" class="review-cta-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================
+       SECTION 3, About The Spot (SEO body content)
+  ====================================================== -->
+  <section style="padding:60px 0;background:#fff;">
+    <div class="container" style="max-width:800px;text-align:center;">
+      <h2 class="font-norwester text-upper text-dark animate-on-scroll" style="font-size:clamp(28px,4vw,42px);margin-bottom:20px;">Nashua's Alcohol-Free Kava Bar &amp; Live Music Venue</h2>
+      <p class="animate-on-scroll" style="font-family:'Roboto Condensed',sans-serif;font-size:17px;line-height:1.8;color:var(--text-body);margin-bottom:16px;">
+        The Spot is downtown Nashua's kava bar and live music venue at 217 Main Street. We serve premium kava, craft coffee from Anchorhead Coffee, creative mocktails, and small bites, all in an alcohol-free, all-ages social lounge.
+      </p>
+      <p class="animate-on-scroll" style="font-family:'Roboto Condensed',sans-serif;font-size:17px;line-height:1.8;color:var(--text-body);margin-bottom:20px;">
+        Open Monday through Thursday 3&ndash;11PM and Friday&ndash;Saturday 3PM&ndash;1AM, The Spot hosts live music, open mic nights, DJ sets, trivia, karaoke, comedy, and community events every week. No cover charge. No alcohol. Just good vibes.
+      </p>
+      <div class="animate-on-scroll" style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+        <a href="pages/menu.html" class="btn btn-teal">View Our Menu</a>
+        <a href="pages/live-music.html" class="btn btn-outline-dark">See What's Playing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       SECTION 5, Follow Us (Instagram + Facebook)
+  ====================================================== -->
+
+  <!-- Wave (white to silver) -->
+  <div class="wave-divider" style="background:#fff;">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C360,0 1080,80 1440,40 L1440,80 L0,80 Z" fill="#C0C0C0"/>
+    </svg>
+  </div>
+
+  <section class="instagram-section">
+    <div class="container">
+      <div class="animate-on-scroll">
+        <div class="instagram-heading-outline">FOLLOW US ON</div>
+        <div class="instagram-heading-solid">SOCIAL MEDIA</div>
+      </div>
+
+      <!-- Social icons row -->
+      <div class="animate-on-scroll" style="display:flex;justify-content:center;gap:24px;margin:16px 0 8px;">
+        <!-- Instagram icon -->
+        <a href="https://instagram.com/thespotnashua" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="52" height="52" rx="14" fill="url(#ig-grad)" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>
+            <defs>
+              <linearGradient id="ig-grad" x1="4" y1="4" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="25%" stop-color="#e6683c"/>
+                <stop offset="50%" stop-color="#dc2743"/>
+                <stop offset="75%" stop-color="#cc2366"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <circle cx="30" cy="30" r="13" stroke="white" stroke-width="3" fill="none"/>
+            <circle cx="43" cy="17" r="3" fill="white"/>
+          </svg>
+        </a>
+        <!-- Facebook icon -->
+        <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="52" height="52" rx="14" fill="#1877F2"/>
+            <path d="M38 30.5h-4.5V27c0-1.4.6-2 2-2H38v-5h-4c-4.5 0-6.5 2.7-6.5 6.5v4H24v5h3.5V48h5V35.5H37l1-5z" fill="white"/>
+          </svg>
+        </a>
+        <!-- TikTok icon -->
+        <a href="https://www.tiktok.com/@thespotnashua" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="52" height="52" rx="14" fill="#000000"/>
+            <path d="M40.5 22.7c-2.2-.5-4-2.1-4.7-4.2h-3.9v18.4c0 1.9-1.6 3.5-3.5 3.5s-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5c.4 0 .8.1 1.1.2v-4c-.4-.1-.7-.1-1.1-.1-4.2 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5 7.5-3.4 7.5-7.5V28.5c1.5 1.1 3.4 1.7 5.4 1.7v-3.9c-.3 0-.5 0-.8-.1.4-.3.7-.6 1-1.5z" fill="#FF0050"/>
+            <path d="M39.7 22.4c-2.2-.5-4-2.1-4.7-4.2h-3.9v18.4c0 1.9-1.6 3.5-3.5 3.5s-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5c.4 0 .8.1 1.1.2v-4c-.4-.1-.7-.1-1.1-.1-4.2 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5 7.5-3.4 7.5-7.5V28.2c1.5 1.1 3.4 1.7 5.4 1.7v-3.9c-1 0-2-.2-2.9-.7z" fill="#00F2EA" transform="translate(-1 -.3)"/>
+            <path d="M40.5 22.7c-2.2-.5-4-2.1-4.7-4.2h-3.9v18.4c0 1.9-1.6 3.5-3.5 3.5s-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5c.4 0 .8.1 1.1.2v-4c-.4-.1-.7-.1-1.1-.1-4.2 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5 7.5-3.4 7.5-7.5V28.5c1.5 1.1 3.4 1.7 5.4 1.7v-3.9c-1 0-2-.2-2.8-.6z" fill="white"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="animate-on-scroll" style="margin-bottom:24px;">
+        <strong style="font-family:'Roboto Condensed',sans-serif;font-size:20px;color:var(--black);">@TheSpotNashua</strong><br/>
+        <span style="font-size:18px;color:var(--black);">#THESPOTNASHUA</span>
+      </div>
+
+      <!-- Photo grid -->
+      <div class="instagram-photos animate-on-scroll">
+        <div class="insta-photo" style="transform:rotate(3deg);padding:0;overflow:hidden;">
+          <picture><source srcset="images/webp/movienight.webp" type="image/webp"><img src="images/movienight.jpg" alt="Movie night event at The Spot" class="insta-photo-img" loading="lazy" /></picture>
+        </div>
+        <div class="insta-photo" style="padding:0;overflow:hidden;">
+          <picture><source srcset="images/webp/soloshot.webp" type="image/webp"><img src="images/soloshot.jpg" alt="Solo performer on stage at The Spot" class="insta-photo-img" loading="lazy" /></picture>
+        </div>
+        <div class="insta-photo" style="transform:rotate(-2deg);padding:0;overflow:hidden;">
+          <picture><source srcset="images/webp/guitar.webp" type="image/webp"><img src="images/guitar.jpg" alt="Guitar player performing at The Spot" class="insta-photo-img" loading="lazy" /></picture>
+        </div>
+      </div>
+
+      <div class="animate-on-scroll" style="margin-top:30px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+        <a href="https://instagram.com/thespotnashua" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark">FOLLOW ON INSTAGRAM</a>
+        <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark">FOLLOW ON FACEBOOK</a>
+        <a href="https://www.tiktok.com/@thespotnashua" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark">FOLLOW ON TIKTOK</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <!-- Footer Wave -->
+  <div class="wave-divider" style="background:var(--silver-primary);">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+
+  <div class="footer-top">
+    <div class="container">
+      <!-- Large teal logo -->
+      <a href="index.html" class="footer-logo-lg footer-logo-teal" style="justify-content:center;">
+        <picture><source srcset="images/webp/logothespot-small.webp" type="image/webp"><img src="images/logothespot.jpg" alt="The Spot Logo" class="logo-icon" width="60" height="60" /></picture>
+        <div class="logo-text-block">
+          <span class="logo-main" style="color:var(--text-heading);font-size:28px;">The Spot</span>
+          <span class="logo-sub" style="color:var(--text-body);">Kava Bar &amp; Music &bull; Nashua NH</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-dark" style="padding-top:40px;">
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="footer-dark-grid" style="max-width:800px;margin:0 auto 30px;">
+        <div class="footer-dark-col">
+          <h4>Events</h4>
+          <ul>
+            <li><a href="pages/live-music.html">Upcoming Shows</a></li>
+            <li><a href="pages/live-music.html">Live Music Calendar</a></li>
+            <li><a href="pages/book-a-spot.html">Book a Spot</a></li>
+          </ul>
+        </div>
+        <div class="footer-dark-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="pages/menu.html">Our Menu</a></li>
+            <li><a href="pages/about.html">About Us</a></li>
+            <li><a href="pages/kava-bar-nashua-nh.html">Why a Kava Bar?</a></li><li><a href="pages/nightlife-nashua-nh.html">Alcohol-Free Nightlife</a></li><li><a href="pages/non-alcoholic-bar-nashua.html">Non-Alcoholic Spot</a></li>
+            <li><a href="pages/privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-dark-col">
+          <h4>Visit Us</h4>
+          <ul>
+            <li><a href="pages/contact.html">217 Main Street</a></li>
+            <li><a href="pages/contact.html">Nashua, NH 03060</a></li>
+            <li><a href="tel:+16037184732">(603) 718-4732</a></li>
+            <li>Mon&ndash;Thu: 3PM&ndash;11PM</li>
+            <li>Fri&ndash;Sat: 3PM&ndash;1AM</li>
+            <li>Sun: Closed</li>
+          </ul>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=217+Main+Street+Nashua+NH+03060" target="_blank" rel="noopener noreferrer" class="footer-directions-btn" aria-label="Open driving directions to The Spot in Google Maps">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Get Directions
+          </a>
+        </div>
+      </div>
+      <hr class="footer-hr"/>
+      <div class="footer-bottom">
+        <div class="social-row">
+          <a href="https://instagram.com/thespotnashua" target="_blank" rel="noopener noreferrer" class="social-btn social-instagram" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" class="social-btn social-facebook" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@thespotnashua" target="_blank" rel="noopener noreferrer" class="social-btn social-tiktok" aria-label="TikTok">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.01a8.16 8.16 0 004.77 1.52V7.08a4.85 4.85 0 01-1-.39z"/></svg>
+          </a>
+        </div>
+        <p class="footer-copyright">&copy; 2024–26 The Spot Kava Bar &amp; Music | All Rights Reserved | <a href="pages/privacy.html" style="color:#ffffff;">Privacy Policy</a> | <a href="pages/terms.html" style="color:#ffffff;">Terms of Service</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js?v=7" defer></script>
+<script src="js/main-home.js?v=7" defer></script>
+<script src="js/analytics.js?v=4" defer></script>
+<!-- SCRUM-235: Floating sticky CTA - mobile only -->
+<a id="spot-sticky-cta" href="tel:+16037184732" aria-label="Call The Spot" style="display:none;position:fixed;bottom:22px;right:18px;z-index:9999;align-items:center;gap:10px;background:#89E3EB;color:#0F272E;font-family:'Norwester',Helvetica,Arial,sans-serif;font-weight:700;font-size:15px;padding:14px 22px;border-radius:50px;box-shadow:0 6px 24px rgba(0,0,0,.28);text-decoration:none;letter-spacing:.03em;transition:transform .2s ease;">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.05 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+  Call Us
+</a>
+<script>
+(function(){var btn=document.getElementById('spot-sticky-cta');if(!btn)return;function show(){btn.style.display=window.innerWidth<=768?'flex':'none';}show();window.addEventListener('resize',show,{passive:true});})();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"36e11f27ee6b416f99af946464719826","r":1}' crossorigin="anonymous"></script>
 </body>
 </html>

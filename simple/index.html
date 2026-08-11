@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spot - Kava Bar & Social Lounge</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Skip to main content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: red;
+            -webkit-text-stroke: 1px white;
+            font-family: 'Yellowtail', cursive;
+            font-size: 2rem; /* Slightly larger since script fonts can feel smaller */
+            font-weight: normal; /* Yellowtail only has one weight */
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background: rgba(255,255,255,0.1);
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .nav-menu a[aria-current="page"] {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .menu-toggle:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: url('images/thespotnashua.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            flex: 1; /* Take up remaining space between nav and footer */
+            padding: 4rem 20px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Dark overlay for better text legibility */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Ensure text appears above overlay */
+        .hero > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Main Content - Hidden sections */
+        main {
+            display: none; /* Hide main entirely when all content is hidden */
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            display: none; /* Hidden as requested */
+        }
+
+        .intro-section h2 {
+            font-size: 2.5rem;
+            color: #2c5f4f;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-section p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #555;
+        }
+
+        /* Features Grid */
+        .features {
+            display: none; /* Hidden as requested */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #2c5f4f;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 20px;
+            flex-shrink: 0;
+            /* Removed margin-top: 4rem */
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: relative;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.6);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem 0;
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                padding: 1rem 20px;
+                border-radius: 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .intro-section h2 {
+                font-size: 2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Social Media Styles */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            position: absolute;
+            right: 1.5rem;
+        }
+
+        .social-links a {
+            color: #fff;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover,
+        .social-links a:focus {
+            color: #4a8f7a;
+        }
+
+        .social-links a:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="index.html" class="logo">The Spot</a>
+            <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu">
+                Menu
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" id="main-content">
+        <h1>Welcome to The Spot</h1>
+        <p>Your community hub for connection, culture, and kava</p>
+    </header>
+
+    <main>
+        <section class="intro-section">
+            <h2>A Space to Gather & Unwind</h2>
+            <p>The Spot is more than just a kava bar—it's a vibrant community space where friends meet, ideas flow, and connections happen. Enjoy our curated selection of kava, coffee, mocktails, and delicious bites in a welcoming, alcohol-free environment.</p>
+        </section>
+
+        <section class="features">
+            <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">🍵</div>
+                <h3>Premium Kava</h3>
+                <p>Experience the authentic relaxation of traditional Pacific Island kava, sourced from the finest suppliers and prepared with care.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">🎵</div>
+                <h3>Live Music</h3>
+                <p>Enjoy live performances in our dedicated music corner featuring local artists and diverse genres throughout the week.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">☕</div>
+                <h3>Coffee & More</h3>
+                <p>From expertly crafted coffee to creative mocktails and tasty bites, we have something for everyone to enjoy.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon" aria-hidden="true">🛋️</div>
+                <h3>Comfortable Space</h3>
+                <p>Relax in our spacious lounge with cozy couches, intimate tables, and a welcoming bar—perfect for work, study, or socializing.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p><strong>The Spot  •  Kava Bar and Music</strong></p>
+            <p>217 Main Street, Nashua, NH 03060  •  Open Daily 3pm - 11pm</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/thespotnashua/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/p/The-Spot-61572943945372/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Mobile menu toggle with accessibility
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+    </script>
+</body>
+</html>
