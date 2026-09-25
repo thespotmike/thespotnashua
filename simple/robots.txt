@@ -1,0 +1,6 @@
+# robots.txt for thespotnashua.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://thespotnashua.com/sitemap.xml

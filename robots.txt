@@ -1,6 +1,56 @@
 # robots.txt for thespotnashua.com
+# Allow all reputable crawlers full access to public pages.
+# Legal pages (privacy, terms) carry per-page noindex via <meta name="robots">.
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+# Explicitly welcome AI search / answer-engine crawlers
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /pages/blog
 
 Sitemap: https://thespotnashua.com/sitemap.xml
